@@ -1,27 +1,50 @@
-import { Flex, Heading, Link } from "@chakra-ui/react"
-import { Link as ReactLink } from "react-router-dom"
+import { SunIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link,
+  useColorMode,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { Link as ReactLink } from "react-router-dom";
+import { RocketIncon } from "../icons/RocketIcon";
 
 export const Header = () => {
+  const { toggleColorMode } = useColorMode();
+  const color = useColorModeValue("black", "white");
+
   return (
-    <Flex
-      as="nav"
-      align="center"
-      justify="center"
-      wrap="wrap"
-      padding={6}
-      color="white"
-    >
-      <Flex align="center" mr={5}>
-        <ReactLink to={"/"}>
-          <Link mr={6}>Home</Link>
-        </ReactLink>
-        <Heading as="h1" size="lg" textTransform={"uppercase"} letterSpacing={"tighter"}>
-          🚀 Supspace
+    <Flex flexDirection={"column"}>
+      <Flex
+        width="full"
+        as="nav"
+        align="center"
+        justify="space-around"
+        wrap="wrap"
+        padding={6}
+        color={color}
+      >
+        <Heading
+          as="h1"
+          size="lg"
+          textTransform={"uppercase"}
+          letterSpacing={"tighter"}
+        >
+          <ReactLink to={"/"}>
+            <RocketIncon color={color} />
+          </ReactLink>
         </Heading>
-        <ReactLink to={"/"}>
-          <Link ml={6}>Launches</Link>
-        </ReactLink>
+        <Box>
+          <ReactLink to={"/"}>
+            <Link ml={6}>Launches</Link>
+          </ReactLink>
+          <Button onClick={toggleColorMode} ml={2} variant={"ghost"}>
+            <SunIcon></SunIcon>
+          </Button>
+        </Box>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
