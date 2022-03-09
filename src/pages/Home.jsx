@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { spaceXApi } from "../lib/api";
 import { NextLaunch } from "../components/launches/NextLaunch";
 import { PreviousLaunch } from "../components/launches/PreviousLaunch";
+import { Loading } from "../components/layouts/Loading";
 
 function Home() {
   const [nextLaunchLoading, setNextLaunchLoading] = useState(false);
@@ -28,7 +29,7 @@ function Home() {
   }, []);
 
   if (!nextLaunchLoading || !previousLaunchesLoding) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
