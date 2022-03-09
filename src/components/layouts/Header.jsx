@@ -37,7 +37,7 @@ export const Header = () => {
           </ReactLink>
         </Heading>
         <Box>
-          <ReactLink to={"/"}>
+          <ReactLink to={"/launches"}>
             <Link ml={6}>Launches</Link>
           </ReactLink>
           <Button onClick={toggleColorMode} ml={2} variant={"ghost"}>
