@@ -4,14 +4,16 @@ import { Button, Flex, IconButton, Text } from "@chakra-ui/react";
 export const Pagination = ({
   numberOfItems,
   itemsPerPage,
-  offset,
   onPageChange,
+  page,
 }) => {
   const numberOfPages = Math.ceil(numberOfItems / itemsPerPage);
-  const currentPage = offset / itemsPerPage === 0 ? 1 : offset / itemsPerPage;
+  const currentPage = page;
 
   const disablePreviousPageButton = currentPage === 1;
   const disableNextPageButton = currentPage === numberOfPages;
+
+  const pagesArray = Array.from({ length: numberOfPages }, (_, i) => i + 1);
 
   return (
     <Flex mt={12} w={"full"} alignItems={"center"} justify={"space-between"}>
@@ -24,14 +26,14 @@ export const Pagination = ({
         >
           Previous
         </IconButton>
-        {[...Array(numberOfPages).keys()].map((page, idx) => (
+        {pagesArray.map((page, idx) => (
           <Button
-            colorScheme={currentPage === page + 1 ? "blue" : "gray"}
+            colorScheme={currentPage === page ? "blue" : "gray"}
             mx={1}
             key={idx}
-            onClick={() => onPageChange(page + 1)}
+            onClick={() => onPageChange(page)}
           >
-            {page + 1}
+            {page}
           </Button>
         ))}
         <IconButton

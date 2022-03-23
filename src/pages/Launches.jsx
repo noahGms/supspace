@@ -14,20 +14,24 @@ import { Pagination } from "../components/Pagination";
 
 function Launches() {
   const [launches, setLaunches] = useState([]);
-  const [currentOffset, setCurrentOffset] = useState(0);
   const [totalLaunches, setTotalLaunches] = useState(0);
   const [launchesLoading, setLaunchesLoading] = useState(false);
   const [orderByDate, setOrderByDate] = useState("desc");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const getLaunches = async (page) => {
     setLaunchesLoading(false);
+    setCurrentPage(page);
 
-    if (page !== 0) {
-      setCurrentOffset(page * 10);
+    let offset = null;
+    if (page === 1) {
+      offset = 0;
+    } else {
+      offset = page * 10 - 10;
     }
 
     const { data } = await spaceXApi.get(
-      `/launches?offset=${currentOffset}&limit=10&order=${orderByDate}&sort=launch_date_utc`
+      `/launches?offset=${offset}&limit=10&order=${orderByDate}&sort=launch_date_utc`
     );
     setLaunches(data);
     setLaunchesLoading(true);
@@ -42,13 +46,13 @@ function Launches() {
 
   const onSelectOrderByDateChange = (e) => {
     setOrderByDate(e.target.value);
-    getLaunches(0);
+    getLaunches(currentPage);
   };
 
   useEffect(() => {
     (async () => {
       await getTotalLaunches();
-      await getLaunches(0);
+      await getLaunches(currentPage);
     })();
   }, []);
 
@@ -102,8 +106,8 @@ function Launches() {
           <Pagination
             numberOfItems={totalLaunches}
             itemsPerPage={10}
-            offset={currentOffset}
-            onPageChange={getLaunches}
+            onPageChange={async (page) => await getLaunches(page)}
+            page={currentPage}
           />
         </Flex>
       </Flex>
