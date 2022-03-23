@@ -1,9 +1,17 @@
 import { Flex, Heading, Text } from "@chakra-ui/react";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 export const NextLaunch = ({ launch }) => {
+  const navigate = useNavigate();
+
+  const goToLaunchDetails = () => {
+    navigate(`/launches/${launch.id}`);
+  };
+
   return (
     <Flex
+      cursor={"pointer"}
       w={"container.lg"}
       h="300px"
       rounded={12}
@@ -19,6 +27,7 @@ export const NextLaunch = ({ launch }) => {
       px={24}
       justify={"space-between"}
       align={"center"}
+      onClick={goToLaunchDetails}
     >
       <Flex flexDirection={"column"}>
         <Heading
