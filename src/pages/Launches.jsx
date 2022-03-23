@@ -1,4 +1,11 @@
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  FormControl,
+  FormLabel,
+  Select,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Launch } from "../components/launches/Launch";
 import { Loading } from "../components/layouts/Loading";
@@ -10,6 +17,7 @@ function Launches() {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [totalLaunches, setTotalLaunches] = useState(0);
   const [launchesLoading, setLaunchesLoading] = useState(false);
+  const [orderByDate, setOrderByDate] = useState("desc");
 
   const getLaunches = async (page) => {
     setLaunchesLoading(false);
@@ -19,7 +27,7 @@ function Launches() {
     }
 
     const { data } = await spaceXApi.get(
-      "launches?limit=10&offset=" + currentOffset
+      `/launches?offset=${currentOffset}&limit=10&order=${orderByDate}&sort=launch_date_utc`
     );
     setLaunches(data);
     setLaunchesLoading(true);
@@ -30,6 +38,11 @@ function Launches() {
     const { data } = await spaceXApi.get("launches");
     setTotalLaunches(data.length);
     setLaunchesLoading(true);
+  };
+
+  const onSelectOrderByDateChange = (e) => {
+    setOrderByDate(e.target.value);
+    getLaunches(0);
   };
 
   useEffect(() => {
@@ -62,6 +75,27 @@ function Launches() {
           >
             Launches
           </Heading>
+
+          <Flex alignSelf={"start"}>
+            <FormControl>
+              <FormLabel>Filter by date</FormLabel>
+              <Select onChange={(e) => onSelectOrderByDateChange(e)}>
+                <option
+                  value="desc"
+                  selected={orderByDate === "desc" ? true : false}
+                >
+                  Descending
+                </option>
+                <option
+                  value="asc"
+                  selected={orderByDate === "asc" ? true : false}
+                >
+                  Ascending
+                </option>
+              </Select>
+            </FormControl>
+          </Flex>
+
           {launches.map((launch, idx) => (
             <Launch key={idx} launch={launch} />
           ))}
