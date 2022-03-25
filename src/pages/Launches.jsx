@@ -6,7 +6,7 @@ import {
   FormLabel,
   Select,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Launch } from "../components/launches/Launch";
 import { Loading } from "../components/layouts/Loading";
 import { spaceXApi } from "../lib/api";
@@ -16,8 +16,8 @@ function Launches() {
   const [launches, setLaunches] = useState([]);
   const [totalLaunches, setTotalLaunches] = useState(0);
   const [launchesLoading, setLaunchesLoading] = useState(false);
-  const [orderByDate, setOrderByDate] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
+  const orderByDate = useRef("desc");
 
   const getLaunches = async (page) => {
     setLaunchesLoading(false);
@@ -31,7 +31,7 @@ function Launches() {
     }
 
     const { data } = await spaceXApi.get(
-      `/launches?offset=${offset}&limit=10&order=${orderByDate}&sort=launch_date_utc`
+      `/launches?offset=${offset}&limit=10&order=${orderByDate.current}&sort=launch_date_utc`
     );
     setLaunches(data);
     setLaunchesLoading(true);
@@ -45,7 +45,7 @@ function Launches() {
   };
 
   const onSelectOrderByDateChange = (e) => {
-    setOrderByDate(e.target.value);
+    orderByDate.current = e.target.value;
     getLaunches(currentPage);
   };
 
@@ -86,13 +86,13 @@ function Launches() {
               <Select onChange={(e) => onSelectOrderByDateChange(e)}>
                 <option
                   value="desc"
-                  selected={orderByDate === "desc" ? true : false}
+                  selected={orderByDate.current === "desc" ? true : false}
                 >
                   Descending
                 </option>
                 <option
                   value="asc"
-                  selected={orderByDate === "asc" ? true : false}
+                  selected={orderByDate.current === "asc" ? true : false}
                 >
                   Ascending
                 </option>
