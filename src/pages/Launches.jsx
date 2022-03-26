@@ -5,12 +5,19 @@ import {
   FormControl,
   FormLabel,
   Select,
+  Input,
+  IconButton,
+  InputGroup,
+  InputRightElement,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { Launch } from "../components/launches/Launch";
 import { Loading } from "../components/layouts/Loading";
 import { spaceXApi } from "../lib/api";
 import { Pagination } from "../components/Pagination";
+import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 
 function Launches() {
   const [launches, setLaunches] = useState([]);
@@ -18,6 +25,10 @@ function Launches() {
   const [launchesLoading, setLaunchesLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const orderByDate = useRef("desc");
+  const [search, setSearch] = useState(null);
+  const [searching, setSearching] = useState(false);
+  const [allLaunches, setAllLaunches] = useState([]);
+  const [launchesSearch, setLaunchesSearch] = useState([]);
 
   const getLaunches = async (page) => {
     setLaunchesLoading(false);
@@ -40,12 +51,31 @@ function Launches() {
   const getTotalLaunches = async () => {
     setLaunchesLoading(false);
     const { data } = await spaceXApi.get("launches");
+    setAllLaunches(data);
     setTotalLaunches(data.length);
     setLaunchesLoading(true);
   };
 
   const onSelectOrderByDateChange = (e) => {
     orderByDate.current = e.target.value;
+    getLaunches(currentPage);
+  };
+
+  const handleSearch = () => {
+    setSearching(true);
+    setLaunchesLoading(false);
+    setLaunchesSearch(
+      allLaunches.filter((launch) => {
+        return launch.mission_name.includes(search);
+      })
+    );
+    setLaunchesLoading(true);
+  };
+
+  const resetSearch = () => {
+    setSearching(false);
+    setSearch(null);
+    setLaunchesSearch([]);
     getLaunches(currentPage);
   };
 
@@ -81,9 +111,12 @@ function Launches() {
           </Heading>
 
           <Flex alignSelf={"start"}>
-            <FormControl>
+            <FormControl w={"auto"}>
               <FormLabel>Filter by date</FormLabel>
-              <Select onChange={(e) => onSelectOrderByDateChange(e)}>
+              <Select
+                disabled={searching}
+                onChange={(e) => onSelectOrderByDateChange(e)}
+              >
                 <option
                   value="desc"
                   selected={orderByDate.current === "desc" ? true : false}
@@ -98,17 +131,62 @@ function Launches() {
                 </option>
               </Select>
             </FormControl>
+            <FormControl w={"xl"} ml={3}>
+              <FormLabel>Search mission</FormLabel>
+              <InputGroup>
+                <Input
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Ex: STARLINK-11 (V1.0)"
+                />
+                <InputRightElement
+                  children={
+                    <>
+                      {searching ? (
+                        <IconButton
+                          onClick={resetSearch}
+                          icon={<CloseIcon />}
+                        />
+                      ) : (
+                        <IconButton onClick={handleSearch}>
+                          <SearchIcon />
+                        </IconButton>
+                      )}
+                    </>
+                  }
+                />
+              </InputGroup>
+            </FormControl>
           </Flex>
 
-          {launches.map((launch, idx) => (
-            <Launch key={idx} launch={launch} />
-          ))}
-          <Pagination
-            numberOfItems={totalLaunches}
-            itemsPerPage={10}
-            onPageChange={async (page) => await getLaunches(page)}
-            page={currentPage}
-          />
+          {!searching ? (
+            <>
+              {launches.map((launch, idx) => (
+                <Launch key={idx} launch={launch} />
+              ))}
+            </>
+          ) : (
+            <>
+              {launchesSearch.map((launch, idx) => (
+                <Launch key={idx} launch={launch} />
+              ))}
+
+              {launchesSearch.length === 0 && (
+                <Alert rounded={6} mt={4} status="info">
+                  <AlertIcon />
+                  No launch found
+                </Alert>
+              )}
+            </>
+          )}
+
+          {!searching && (
+            <Pagination
+              numberOfItems={totalLaunches}
+              itemsPerPage={10}
+              onPageChange={async (page) => await getLaunches(page)}
+              page={currentPage}
+            />
+          )}
         </Flex>
       </Flex>
     </Box>
