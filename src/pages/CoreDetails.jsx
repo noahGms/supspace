@@ -68,7 +68,7 @@ function CoreDetails() {
             flexDirection={"column"}
           >
             <Text>
-              Orginal launch date:
+              Orginal launch date:{" "}
               {moment(core.original_launch).format("MMMM Do YYYY, h:mm:ss a")}
             </Text>
             <Text>Water Landing: {core.water_landing.toString()}</Text>
