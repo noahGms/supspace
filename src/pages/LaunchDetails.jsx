@@ -9,10 +9,12 @@ import {
   Text,
   Image,
   Tag,
-  UnorderedList,
-  ListItem,
+  IconButton,
 } from "@chakra-ui/react";
 import { getRandomNumber } from "../lib/utils";
+import { Link as ReactLink } from "react-router-dom";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import moment from "moment";
 
 function LaunchDetails() {
   let { id } = useParams();
@@ -104,28 +106,33 @@ function LaunchDetails() {
             </Flex>
           </Flex>
           <Flex mt={10} flexDirection={"column"} alignSelf={"start"}>
-            <Heading
-              as="h1"
-              size="xl"
-              letterSpacing={"tighter"}
-              fontWeight={"normal"}
-              mb={12}
-            >
-              First stage
-            </Heading>
             {launch.rocket.first_stage.cores.map((core, idx) => (
               <>
-                <Text key={idx}>Core ID: {core.core.id}</Text>
+                <Heading
+                  as="h1"
+                  size="xl"
+                  letterSpacing={"tighter"}
+                  fontWeight={"normal"}
+                  mb={12}
+                  key={idx}
+                >
+                  First stage {core.core.id}{" "}
+                  {core.core.missions.length > 1 && (
+                    <ReactLink to={`/cores/${core.core.id}`}>
+                      <IconButton
+                        variant={"link"}
+                        icon={<ExternalLinkIcon fontSize={"2xl"} />}
+                      ></IconButton>
+                    </ReactLink>
+                  )}
+                </Heading>
                 <p>Water Landing: {core.core.water_landing.toString()}</p>
-                <p>Original landing: {core.core.original_launch}</p>
-                <h3>Missions performed:</h3>
-                <UnorderedList>
-                  {core.core.missions.map((mission) => {
-                    return (
-                      <ListItem key={mission.flight}>{mission.name}</ListItem>
-                    );
-                  })}
-                </UnorderedList>
+                <p>
+                  Original landing:{" "}
+                  {moment(core.core.original_launch).format(
+                    "MMMM Do YYYY, h:mm:ss a"
+                  )}
+                </p>
               </>
             ))}
           </Flex>
