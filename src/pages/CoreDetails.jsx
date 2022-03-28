@@ -11,7 +11,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Loading } from "../components/layouts/Loading";
 import { useEffect, useState } from "react";
 import { spaceXApi } from "../lib/api";
-import moment from "moment";
+import { formatDate } from "../lib/utils";
 
 function CoreDetails() {
   let { id } = useParams();
@@ -67,10 +67,7 @@ function CoreDetails() {
             alignSelf={"start"}
             flexDirection={"column"}
           >
-            <Text>
-              Orginal launch date:{" "}
-              {moment(core.original_launch).format("MMMM Do YYYY, h:mm:ss a")}
-            </Text>
+            <Text>Orginal launch date: {formatDate(core.original_launch)}</Text>
             <Text>Water Landing: {core.water_landing.toString()}</Text>
             <Text>
               Status:

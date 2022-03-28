@@ -1,6 +1,5 @@
 import { Flex, Heading, Text } from "@chakra-ui/react";
-import moment from "moment";
-import { getRandomNumber } from "../../lib/utils";
+import { formatDate, getRandomNumber } from "../../lib/utils";
 import { useNavigate } from "react-router-dom";
 
 export const PreviousLaunch = ({ previousLaunch }) => {
@@ -54,9 +53,7 @@ export const PreviousLaunch = ({ previousLaunch }) => {
           {previousLaunch.mission_name}
         </Heading>
         <Text color={"white"}>
-          {moment(previousLaunch.launch_date_local).format(
-            "MMMM Do YYYY, h:mm:ss a"
-          )}
+          {formatDate(previousLaunch.launch_date_local)}
         </Text>
       </Flex>
       <Flex

@@ -11,10 +11,9 @@ import {
   Tag,
   IconButton,
 } from "@chakra-ui/react";
-import { getRandomNumber } from "../lib/utils";
+import { formatDate, getRandomNumber } from "../lib/utils";
 import { Link as ReactLink } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import moment from "moment";
 
 function LaunchDetails() {
   let { id } = useParams();
@@ -94,7 +93,7 @@ function LaunchDetails() {
               <Text>Rocket: {launch.rocket.rocket_name}</Text>
               <Text>Site name long: {launch.launch_site.site_name_long}</Text>
               <Text>Site name: {launch.launch_site.site_name}</Text>
-              <Text>Launch date UTC: {launch.launch_date_utc}</Text>
+              <Text>Launch date UTC: {formatDate(launch.launch_date_utc)}</Text>
               <Text>
                 Successful/failed launch:{" "}
                 {launch.launch_success ? (
@@ -127,12 +126,7 @@ function LaunchDetails() {
                   )}
                 </Heading>
                 <p>Water Landing: {core.core.water_landing.toString()}</p>
-                <p>
-                  Original landing:{" "}
-                  {moment(core.core.original_launch).format(
-                    "MMMM Do YYYY, h:mm:ss a"
-                  )}
-                </p>
+                <p>Original landing: {formatDate(core.core.original_launch)}</p>
               </>
             ))}
           </Flex>

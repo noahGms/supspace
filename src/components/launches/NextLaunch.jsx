@@ -1,6 +1,6 @@
 import { Flex, Heading, Text } from "@chakra-ui/react";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../lib/utils";
 
 export const NextLaunch = ({ launch }) => {
   const navigate = useNavigate();
@@ -38,9 +38,7 @@ export const NextLaunch = ({ launch }) => {
         >
           {launch.mission_name}
         </Heading>
-        <Text>
-          {moment(launch.launch_date_local).format("MMMM Do YYYY, h:mm:ss a")}
-        </Text>
+        <Text>{formatDate(launch.launch_date_local)}</Text>
       </Flex>
       <Heading
         as="h1"
