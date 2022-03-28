@@ -106,14 +106,13 @@ function LaunchDetails() {
           </Flex>
           <Flex mt={10} flexDirection={"column"} alignSelf={"start"}>
             {launch.rocket.first_stage.cores.map((core, idx) => (
-              <>
+              <div key={idx}>
                 <Heading
                   as="h1"
                   size="xl"
                   letterSpacing={"tighter"}
                   fontWeight={"normal"}
                   mb={12}
-                  key={idx}
                 >
                   First stage {core.core.id}{" "}
                   {core.core.missions.length > 1 && (
@@ -127,7 +126,7 @@ function LaunchDetails() {
                 </Heading>
                 <p>Water Landing: {core.core.water_landing.toString()}</p>
                 <p>Original landing: {formatDate(core.core.original_launch)}</p>
-              </>
+              </div>
             ))}
           </Flex>
         </Flex>

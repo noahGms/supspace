@@ -116,19 +116,10 @@ function Launches() {
               <Select
                 disabled={searching}
                 onChange={(e) => onSelectOrderByDateChange(e)}
+                defaultValue={orderByDate.current}
               >
-                <option
-                  value="desc"
-                  selected={orderByDate.current === "desc" ? true : false}
-                >
-                  Descending
-                </option>
-                <option
-                  value="asc"
-                  selected={orderByDate.current === "asc" ? true : false}
-                >
-                  Ascending
-                </option>
+                <option value="desc">Descending</option>
+                <option value="asc">Ascending</option>
               </Select>
             </FormControl>
             <FormControl w={"xl"} ml={3}>

@@ -11,14 +11,8 @@ export const Footer = () => {
           letterSpacing={"tighter"}
         >
           © SUPSPACE - All rights reverved -{" "}
-          <Link>
-            <a
-              href="https://github.com/noahGms"
-              target="_blank"
-              rel="noreferrer"
-            >
-              @noahGms
-            </a>
+          <Link href="https://github.com/noahGms" isExternal>
+            @noahGms
           </Link>
         </Heading>
       </Flex>
