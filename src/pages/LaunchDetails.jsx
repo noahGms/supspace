@@ -72,12 +72,6 @@ function LaunchDetails() {
             Launch - {launch.mission_name}
           </Heading>
           <Flex mt={50} w={"full"} justify={"space-around"} alignSelf={"start"}>
-            <Image
-              boxSize="300px"
-              objectFit="contain"
-              src={getImage()}
-              alt="launch image"
-            />
             <Flex px={10} flexDirection={"column"}>
               <Heading
                 as="h1"
@@ -102,32 +96,46 @@ function LaunchDetails() {
                   <Tag colorScheme={"red"}>Failed</Tag>
                 )}
               </Text>
+
+              {launch.rocket.first_stage.cores.map((core, idx) => (
+                <Box key={idx} mt={12}>
+                  <Heading
+                    as="h2"
+                    size="lg"
+                    letterSpacing={"tighter"}
+                    fontWeight={"normal"}
+                    mb={6}
+                  >
+                    First stage {core.core.id}{" "}
+                    {core.core.missions.length > 1 && (
+                      <ReactLink to={`/cores/${core.core.id}`}>
+                        <IconButton
+                          variant={"link"}
+                          icon={<ExternalLinkIcon fontSize={"2xl"} />}
+                        ></IconButton>
+                      </ReactLink>
+                    )}
+                  </Heading>
+                  <Text>
+                    Water Landing:{" "}
+                    <Tag
+                      colorScheme={core.core.water_landing ? "green" : "red"}
+                    >
+                      {core.core.water_landing.toString()}
+                    </Tag>
+                  </Text>
+                  <Text>
+                    Original landing: {formatDate(core.core.original_launch)}
+                  </Text>
+                </Box>
+              ))}
             </Flex>
-          </Flex>
-          <Flex mt={10} flexDirection={"column"} alignSelf={"start"}>
-            {launch.rocket.first_stage.cores.map((core, idx) => (
-              <div key={idx}>
-                <Heading
-                  as="h1"
-                  size="xl"
-                  letterSpacing={"tighter"}
-                  fontWeight={"normal"}
-                  mb={12}
-                >
-                  First stage {core.core.id}{" "}
-                  {core.core.missions.length > 1 && (
-                    <ReactLink to={`/cores/${core.core.id}`}>
-                      <IconButton
-                        variant={"link"}
-                        icon={<ExternalLinkIcon fontSize={"2xl"} />}
-                      ></IconButton>
-                    </ReactLink>
-                  )}
-                </Heading>
-                <p>Water Landing: {core.core.water_landing.toString()}</p>
-                <p>Original landing: {formatDate(core.core.original_launch)}</p>
-              </div>
-            ))}
+            <Image
+              boxSize="300px"
+              objectFit="contain"
+              src={getImage()}
+              alt="launch image"
+            />
           </Flex>
         </Flex>
       </Flex>
