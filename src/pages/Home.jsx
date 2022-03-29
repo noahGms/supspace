@@ -2,8 +2,8 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { spaceXApi } from "../lib/api";
 import { NextLaunch } from "../components/launches/NextLaunch";
-import { PreviousLaunch } from "../components/launches/PreviousLaunch";
 import { Loading } from "../components/layouts/Loading";
+import { Launch } from "../components/launches/Launch";
 
 function Home() {
   const [nextLaunchLoading, setNextLaunchLoading] = useState(false);
@@ -57,7 +57,7 @@ function Home() {
           Previous launches
         </Heading>
         {previousLaunches.map((launch, idx) => (
-          <PreviousLaunch key={idx} previousLaunch={launch} />
+          <Launch key={idx} launch={launch} />
         ))}
       </Flex>
     </Box>
